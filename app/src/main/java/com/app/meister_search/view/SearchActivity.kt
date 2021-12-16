@@ -32,7 +32,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
         context = this@SearchActivity
         controllisteners()
@@ -51,18 +50,24 @@ class SearchActivity : AppCompatActivity() {
 
         searchActivityViewModel.getSearchResults(jsonObject, "object")!!.observe(this,
             { searchResponse ->
-                val results = searchResponse.results
-                val paging = searchResponse.paging
-                if (paging != null) {
-                    if (paging.totalResults!! > 0) {
-                        Log.e("dataLoaders: ", results?.projects?.get(0)?.name.toString())
-                        loadRecycler(searchResponse)
-                        showRecycler()
-                    } else {
-                        showSearchMessage()
+                if(searchResponse!=null){
+                    val results = searchResponse!!.results
+                    val paging = searchResponse.paging
+                    if (paging != null) {
+                        if (paging.totalResults!! > 0) {
+                            Log.e("dataLoaders: ", results?.projects?.get(0)?.name.toString())
+                            loadRecycler(searchResponse)
+                            showRecycler()
+                        } else {
+                            showSearchMessage()
+                        }
+                        hideLoadingIndicator()
                     }
+                }else{
+                    showSearchMessage()
                     hideLoadingIndicator()
                 }
+
             })
     }
 
