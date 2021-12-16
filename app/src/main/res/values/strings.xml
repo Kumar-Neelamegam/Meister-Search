@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Meister-Search</string>
+    <string name="label_search">Search</string>
+    <string name="label_all">All</string>
+    <string name="label_active">Active</string>
+    <string name="label_archived">Archived</string>
+    <string name="label_search_hint1">You can search for task titles, notes, users using @, tags using #, checklist items, and much more.</string>
+    <string name="label_search_hint2">Search for a task using a few keywords</string>
+    <string name="label_task_name">Task Name</string>
+    <string name="label_projectname">Project Name</string>
+    <string name="error_notfound">No results found, try again</string>
+</resources>

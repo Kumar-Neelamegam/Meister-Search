@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5FBFB"
+        android:orientation="vertical"
+        tools:context=".view.SearchActivity">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_marginleft"
+            android:layout_marginTop="@dimen/card_margin_top"
+            android:layout_marginEnd="@dimen/card_marginright"
+            android:padding="@dimen/card_padding"
+            app:cardCornerRadius="@dimen/card_radius"
+            app:cardElevation="@dimen/card_elevation">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edt_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/edtbx_marginleft"
+                android:layout_marginEnd="@dimen/edtbx_marginright"
+                android:backgroundTint="@color/white"
+                android:drawableEnd="@drawable/ic_baseline_close_24"
+                android:drawableTint="@color/edtbx_drawable_tint"
+                android:hint="@string/label_search"
+                android:maxLines="1"
+                android:textColor="@color/black" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_left10"
+            android:layout_marginTop="@dimen/margin_top12"
+            android:layout_marginEnd="@dimen/margin_right10"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_all"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/label_all" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_active"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_active" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_achieved"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_archived" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/loading_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:max="100"
+            android:progress="10"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_left10"
+            android:layout_marginTop="@dimen/margin_top12"
+            android:layout_marginEnd="@dimen/margin_right10"
+            android:lineSpacingExtra="@dimen/linespace2"
+            android:text="@string/label_search_hint1"
+            android:textColor="@color/txtvw_textcolor" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_left10"
+            android:layout_marginTop="@dimen/margin_top12"
+            android:layout_marginEnd="@dimen/margin_right10"
+            android:layout_marginBottom="@dimen/margin_bottom12"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout_search_hint2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="@dimen/padding"
+                app:srcCompat="@drawable/icon_search" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtvw_searchmessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding"
+                android:text="@string/label_search_hint2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

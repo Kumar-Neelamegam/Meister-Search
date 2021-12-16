@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding">10dp</dimen>
+    <dimen name="card_padding">8dp</dimen>
+    <dimen name="card_radius">6dp</dimen>
+    <dimen name="card_elevation">6dp</dimen>
+    <dimen name="card_marginright">10dp</dimen>
+    <dimen name="card_margin_top">16dp</dimen>
+    <dimen name="card_marginleft">10dp</dimen>
+    <dimen name="edtbx_marginright">4dp</dimen>
+    <dimen name="edtbx_marginleft">12dp</dimen>
+    <dimen name="margin_top12">12dp</dimen>
+    <dimen name="margin_top10">10dp</dimen>
+    <dimen name="margin_bottom10">10dp</dimen>
+    <dimen name="margin_bottom12">12dp</dimen>
+    <dimen name="margin_left10">10dp</dimen>
+    <dimen name="margin_right10">10dp</dimen>
+    <dimen name="linespace2">2dp</dimen>
+    <dimen name="txtsz_task_name">12sp</dimen>
+    <dimen name="padding6">6dp</dimen>
+    <dimen name="padding8">8dp</dimen>
+    <dimen name="onedp">1dp</dimen>
+    <dimen name="eightdp">8dp</dimen>
+    <dimen name="fourdp">4dp</dimen>
+    <dimen name="padding5">5dp</dimen>
+    <dimen name="txtsz_12">12sp</dimen>
+    <dimen name="txtsz_16">16sp</dimen>
+
+</resources>
