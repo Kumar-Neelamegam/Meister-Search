@@ -12,11 +12,18 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.meister_search.R
 import com.app.meister_search.databinding.ActivitySearchBinding
+import com.app.meister_search.model.CustomTask
 import com.app.meister_search.model.SearchResponse
+import com.app.meister_search.persistence.AppDatabase
+import com.app.meister_search.persistence.TaskArchive
+import com.app.meister_search.persistence.TaskArchiveDao
 import com.app.meister_search.viewmodel.SearchActivityViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -24,7 +31,6 @@ import java.util.*
 
 class SearchActivity : AppCompatActivity() {
 
-    var TAG = this.javaClass.name
     private lateinit var binding: ActivitySearchBinding
     lateinit var context: Context
     lateinit var searchActivityViewModel: SearchActivityViewModel
@@ -34,41 +40,32 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
         context = this@SearchActivity
+        initialization()
         controllisteners()
+        callInsert()
+    }
+
+    private fun initialization() {
+        searchActivityViewModel = ViewModelProvider(this).get(SearchActivityViewModel::class.java)
+
     }
 
     private fun dataLoaders(searchTerm: String) {
 
-        searchActivityViewModel = ViewModelProvider(this).get(SearchActivityViewModel::class.java)
+        searchActivityViewModel.getSearchResults(searchTerm)
+        searchActivityViewModel.customTaskList?.observe(this, {
+                apiResponse ->
+            if (apiResponse!=null){
+                loadRecycler(apiResponse)
+                showRecycler()
+                hideLoadingIndicator()
+            }else
+            {
+                showSearchMessage()
+                hideLoadingIndicator()
+            }
+        })
 
-        val jsonObject = JSONObject()
-        try {
-            jsonObject.put("text", searchTerm)
-        } catch (e: JSONException) {
-            Log.d(TAG, "dataLoaders: ")
-        }
-
-        searchActivityViewModel.getSearchResults(jsonObject, "object")!!.observe(this,
-            { searchResponse ->
-                if(searchResponse!=null){
-                    val results = searchResponse!!.results
-                    val paging = searchResponse.paging
-                    if (paging != null) {
-                        if (paging.totalResults!! > 0) {
-                            Log.e("dataLoaders: ", results?.projects?.get(0)?.name.toString())
-                            loadRecycler(searchResponse)
-                            showRecycler()
-                        } else {
-                            showSearchMessage()
-                        }
-                        hideLoadingIndicator()
-                    }
-                }else{
-                    showSearchMessage()
-                    hideLoadingIndicator()
-                }
-
-            })
     }
 
     private fun controllisteners() {
@@ -117,6 +114,15 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
+
+        binding.chipActive.setOnClickListener {
+            //TODO filter the list
+        }
+
+        binding.chipArchived.setOnClickListener {
+
+        }
+
     }
 
     fun showRecycler() {
@@ -139,13 +145,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    private fun loadRecycler(results: SearchResponse?) {
+    private fun loadRecycler(results: List<CustomTask>?) {
         binding.recyclerResults.adapter = adapter
         binding.recyclerResults.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         if (results != null) {
-            adapter.searchResponse = results
-            adapter.paging = results.paging
+            adapter.resultList = results
         }
     }
 
@@ -155,6 +160,12 @@ class SearchActivity : AppCompatActivity() {
 
     fun hideLoadingIndicator() {
         binding.loadingIndicator.visibility = View.GONE
+    }
+
+    fun callInsert(){
+        lifecycleScope.launch(Dispatchers.IO) {
+            //searchActivityViewModel.insertSampleData()
+        }
     }
 
 }

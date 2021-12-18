@@ -18,15 +18,15 @@ object SearchActivityRepository {
         RetrofitClient.apiInterface.search(term, respFormat)
             ?.enqueue(object : Callback<SearchResponse?> {
                 override fun onFailure(call: Call<SearchResponse?>, t: Throwable) {
-                    Log.v("DEBUG : ", t.message.toString())
+                    Log.d("DEBUG : ", t.message.toString())
                 }
 
                 override fun onResponse(
                     call: Call<SearchResponse?>,
                     response: Response<SearchResponse?>
                 ) {
-                    Log.v("DEBUG : ", response.body().toString())
-                    searchResponse.value = response.body()
+                    Log.d("DEBUG : ", response.body().toString())
+                    searchResponse.postValue(response.body())
                 }
             })
         return searchResponse
