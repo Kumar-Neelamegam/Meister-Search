@@ -9,6 +9,8 @@
     <dimen name="card_marginleft">10dp</dimen>
     <dimen name="edtbx_marginright">4dp</dimen>
     <dimen name="edtbx_marginleft">12dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_top12">12dp</dimen>
     <dimen name="margin_top10">10dp</dimen>
     <dimen name="margin_bottom10">10dp</dimen>

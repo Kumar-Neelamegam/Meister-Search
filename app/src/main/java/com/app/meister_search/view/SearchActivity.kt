@@ -1,12 +1,11 @@
 package com.app.meister_search.view
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.View.OnTouchListener
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,55 +14,50 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.meister_search.R
 import com.app.meister_search.databinding.ActivitySearchBinding
-import com.app.meister_search.model.SearchResponse
+import com.app.meister_search.databinding.InfoDialogBinding
+import com.app.meister_search.model.CustomTask
 import com.app.meister_search.viewmodel.SearchActivityViewModel
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 
 
 class SearchActivity : AppCompatActivity() {
 
-    var TAG = this.javaClass.name
     private lateinit var binding: ActivitySearchBinding
     lateinit var context: Context
     lateinit var searchActivityViewModel: SearchActivityViewModel
-    val adapter = SearchAdapter()
+    var adapter = SearchAdapter()
+    var customListOriginal:List<CustomTask> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
         context = this@SearchActivity
+        initialization()
         controllisteners()
     }
 
-    private fun dataLoaders(searchTerm: String) {
-
+    private fun initialization() {
         searchActivityViewModel = ViewModelProvider(this).get(SearchActivityViewModel::class.java)
+        binding.recyclerResults.adapter = adapter
 
-        val jsonObject = JSONObject()
-        try {
-            jsonObject.put("text", searchTerm)
-        } catch (e: JSONException) {
-            Log.d(TAG, "dataLoaders: ")
-        }
+    }
 
-        searchActivityViewModel.getSearchResults(jsonObject, "object")!!.observe(this,
-            { searchResponse ->
-                val results = searchResponse.results
-                val paging = searchResponse.paging
-                if (paging != null) {
-                    if (paging.totalResults!! > 0) {
-                        Log.e("dataLoaders: ", results?.projects?.get(0)?.name.toString())
-                        loadRecycler(searchResponse)
-                        showRecycler()
-                    } else {
-                        showSearchMessage()
-                    }
-                    hideLoadingIndicator()
-                }
-            })
+    private fun dataLoaders(searchTerm: String) {
+        searchActivityViewModel.getSearchResults(searchTerm)
+        searchActivityViewModel.customTaskList?.observe(this, {
+                apiResponse ->
+            if (apiResponse!=null && apiResponse.isNotEmpty()){
+                customListOriginal=apiResponse
+                loadRecycler(apiResponse)
+                showRecycler()
+                hideLoadingIndicator()
+            }else
+            {
+                showSearchMessage()
+                hideLoadingIndicator()
+            }
+        })
+
     }
 
     private fun controllisteners() {
@@ -78,6 +72,7 @@ class SearchActivity : AppCompatActivity() {
                     val textView = v as TextView
                     if (event.x >= textView.width - textView.compoundPaddingEnd) {
                         textView.text = ""
+                        showSearchMessage()
                         binding.txtvwSearchmessage.setText(R.string.label_search_hint2)
                         return@OnTouchListener true
                     }
@@ -112,6 +107,33 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
+        binding.chipAll.setOnClickListener {
+            loadRecycler(customListOriginal)
+            binding.recyclerResults.adapter?.notifyDataSetChanged()
+        }
+
+        binding.chipActive.setOnClickListener {
+            val customListFiltered:List<CustomTask> = customListOriginal.filter {
+                    customTask ->
+                customTask.status
+            }
+            loadRecycler(customListFiltered)
+            binding.recyclerResults.adapter?.notifyDataSetChanged()
+        }
+
+        binding.chipArchived.setOnClickListener {
+            val customListFiltered:List<CustomTask> = customListOriginal.filter {
+                    customTask ->
+                !customTask.status
+            }
+            loadRecycler(customListFiltered)
+            binding.recyclerResults.adapter?.notifyDataSetChanged()
+        }
+
+        adapter.onItemClick ={ customTask ->
+            showDialog(customTask.taskName, customTask.projectName)
+        }
+
     }
 
     fun showRecycler() {
@@ -134,13 +156,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    private fun loadRecycler(results: SearchResponse?) {
-        binding.recyclerResults.adapter = adapter
+    private fun loadRecycler(results: List<CustomTask>?) {
         binding.recyclerResults.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         if (results != null) {
-            adapter.searchResponse = results
-            adapter.paging = results.paging
+            adapter.resultList = results
         }
     }
 
@@ -150,6 +170,25 @@ class SearchActivity : AppCompatActivity() {
 
     fun hideLoadingIndicator() {
         binding.loadingIndicator.visibility = View.GONE
+    }
+
+    fun showDialog(taskName: String, projectName: String) {
+
+        val binding: InfoDialogBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.info_dialog, null, false)
+        val dialog = Dialog(context)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(binding.root)
+        dialog.getWindow()?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.show()
+
+        binding.txtvwTaskname.text = getString(R.string.label_task_name)+ taskName
+        binding.txtvwProjectname.text = getString(R.string.label_projectname)+projectName
+
+        binding.btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+        binding.imgvwClose.setOnClickListener { dialog.dismiss() }
+
     }
 
 }

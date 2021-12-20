@@ -17,8 +17,8 @@ interface TaskArchiveDao {
     @Query("Select * from taskarchive where id=:Id")
     fun getTaskArchive(Id: Int): TaskArchive
 
-    @Query("Select * from taskarchive where taskName like :searchTerm")
-    fun getAllRelevantTasks(searchTerm: String): LiveData<List<TaskArchive>>
+    @Query("Select DISTINCT taskId, taskName, projectName, status from taskarchive where taskName like :searchTerm || '%'")
+    fun getAllRelevantTasks(searchTerm: String): List<TaskArchive>
 
     @Update
     fun updateArchive(taskArchive: TaskArchive)

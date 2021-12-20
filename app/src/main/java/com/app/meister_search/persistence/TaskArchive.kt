@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class TaskArchive(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
     val taskName: String,
-    var taskId: String,
-    val projectName: String
+    var taskId: Int,
+    val projectName: String,
+    val status: Boolean
 )

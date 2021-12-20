@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_margin="@dimen/margin_5"
+        android:background="@drawable/round_corner"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:padding="@dimen/padding8"
+            android:layout_gravity="end"
+            android:id="@+id/imgvw_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/holo_red_dark"
+            app:srcCompat="@drawable/ic_baseline_close_24" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_margin_top"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark"
+            android:text="@string/task_info" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/task_ic" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtvw_projectname"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_5"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="@string/label_projectname" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtvw_taskname"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_margin="@dimen/margin_5"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="@string/label_task_name" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:background="@color/txtvw_textcolor"
+            android:padding="@dimen/padding5"
+            android:text="@string/label_close"
+            android:layout_marginBottom="@dimen/margin_bottom10"
+            android:textAlignment="center"
+            android:textColor="@color/white"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

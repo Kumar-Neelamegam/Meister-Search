@@ -2,14 +2,9 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="results"
-            type="com.app.meister_search.model.SearchResponse" />
-    </data>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/round_corner"
+    >
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

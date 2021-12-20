@@ -1,45 +1,47 @@
 package com.app.meister_search.view
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.meister_search.R
 import com.app.meister_search.databinding.SearchRowitemBinding
-import com.app.meister_search.model.Paging
-import com.app.meister_search.model.Project
-import com.app.meister_search.model.SearchResponse
-import com.app.meister_search.model.Section
+import com.app.meister_search.model.*
 
-class SearchAdapter : RecyclerView.Adapter<SearchViewHolder>() {
+class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
-    var searchResponse = SearchResponse()
-    var paging = SearchResponse().paging
+    lateinit var resultList:List<CustomTask>
+    var onItemClick: ((CustomTask) -> Unit)? = null
 
-    fun searchResults(response: SearchResponse, paging: Paging) {
-        this.searchResponse = response
-        this.paging = paging
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = SearchRowitemBinding.inflate(inflater, parent, false)
+        val binding:SearchRowitemBinding = DataBindingUtil.inflate(inflater, R.layout.search_rowitem, parent, false)
         return SearchViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        val task = searchResponse.results?.tasks?.get(position)
-        val selectedSection: Section =
-            searchResponse.results?.sections?.filter { s -> s.id == task?.sectionId }!!.single()
-        val selectedProject: Project =
-            searchResponse.results?.projects?.filter { p -> p.id == selectedSection.projectId }!!
-                .single()
-        holder.binding.taskName.text = task?.name ?: "N/A"
-        holder.binding.projectName.text = selectedProject.name
+        holder.binding.taskName.text = resultList[position].taskName
+        holder.binding.projectName.text = resultList[position].projectName
     }
 
     override fun getItemCount(): Int {
-        return paging?.totalResults!!
+        return resultList.size
     }
+
+    inner class SearchViewHolder(val binding: SearchRowitemBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener{
+                onItemClick?.invoke(resultList[bindingAdapterPosition])
+            }
+        }
+    }
+
 }
 
-class SearchViewHolder(val binding: SearchRowitemBinding) : RecyclerView.ViewHolder(binding.root)

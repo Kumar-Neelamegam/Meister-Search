@@ -59,7 +59,7 @@
                 android:text="@string/label_active" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_achieved"
+                android:id="@+id/chip_archived"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
