@@ -25,9 +25,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     lateinit var context: Context
     lateinit var searchActivityViewModel: SearchActivityViewModel
-    val adapter = SearchAdapter()
-    var customListOriginal: List<CustomTask> = arrayListOf()
-    val customListFiltered: List<CustomTask> = arrayListOf()
+    var adapter = SearchAdapter()
+    var customListOriginal:List<CustomTask> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +43,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun dataLoaders(searchTerm: String) {
-
         searchActivityViewModel.getSearchResults(searchTerm)
-        searchActivityViewModel.customTaskList?.observe(this, { apiResponse ->
-            if (apiResponse != null && apiResponse.isNotEmpty()) {
-                customListOriginal = apiResponse
+        searchActivityViewModel.customTaskList?.observe(this, {
+                apiResponse ->
+            if (apiResponse!=null && apiResponse.isNotEmpty()){
+                customListOriginal=apiResponse
                 loadRecycler(apiResponse)
                 showRecycler()
                 hideLoadingIndicator()
-            } else {
+            }else
+            {
                 showSearchMessage()
                 hideLoadingIndicator()
             }
@@ -72,9 +72,8 @@ class SearchActivity : AppCompatActivity() {
                     val textView = v as TextView
                     if (event.x >= textView.width - textView.compoundPaddingEnd) {
                         textView.text = ""
+                        showSearchMessage()
                         binding.txtvwSearchmessage.setText(R.string.label_search_hint2)
-                        binding.recyclerResults.adapter = null
-                        binding.recyclerResults.adapter?.notifyDataSetChanged()
                         return@OnTouchListener true
                     }
                 }
@@ -114,7 +113,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.chipActive.setOnClickListener {
-            val customListFiltered: List<CustomTask> = customListOriginal.filter { customTask ->
+            val customListFiltered:List<CustomTask> = customListOriginal.filter {
+                    customTask ->
                 customTask.status
             }
             loadRecycler(customListFiltered)
@@ -122,14 +122,15 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.chipArchived.setOnClickListener {
-            val customListFiltered: List<CustomTask> = customListOriginal.filter { customTask ->
+            val customListFiltered:List<CustomTask> = customListOriginal.filter {
+                    customTask ->
                 !customTask.status
             }
             loadRecycler(customListFiltered)
             binding.recyclerResults.adapter?.notifyDataSetChanged()
         }
 
-        adapter.onItemClick = { customTask ->
+        adapter.onItemClick ={ customTask ->
             showDialog(customTask.taskName, customTask.projectName)
         }
 
@@ -173,17 +174,15 @@ class SearchActivity : AppCompatActivity() {
 
     fun showDialog(taskName: String, projectName: String) {
 
-        val binding: InfoDialogBinding =
-            DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.info_dialog, null, false)
+        val binding: InfoDialogBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.info_dialog, null, false)
         val dialog = Dialog(context)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(binding.root)
-        dialog.getWindow()
-            ?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.show()
 
-        binding.txtvwTaskname.text = getString(R.string.label_task_name) + taskName
-        binding.txtvwProjectname.text = getString(R.string.label_projectname) + projectName
+        binding.txtvwTaskname.text = getString(R.string.label_task_name)+ taskName
+        binding.txtvwProjectname.text = getString(R.string.label_projectname)+projectName
 
         binding.btnClose.setOnClickListener {
             dialog.dismiss()
